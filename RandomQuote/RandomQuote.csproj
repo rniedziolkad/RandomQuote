@@ -15,4 +15,10 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Account\Index.cshtml" />
+      <AdditionalFiles Include="Views\Account\Login.cshtml" />
+      <AdditionalFiles Include="Views\Account\Register.cshtml" />
+    </ItemGroup>
+
 </Project>

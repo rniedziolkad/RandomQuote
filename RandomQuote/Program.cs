@@ -16,6 +16,12 @@ builder.Services.AddDbContext<RandomDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("RandomDB"));
 });
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/Login";
+    options.SlidingExpiration = true;
+});
 
 var app = builder.Build();
 
