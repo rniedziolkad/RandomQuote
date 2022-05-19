@@ -1,7 +1,17 @@
-﻿@{
+﻿@model LoginViewModel
+@{
     ViewData["Title"] = "Login";
 }
 
 <div class="text-center">
     <h1 class="display-4">Login Here</h1>
+    <form method="post" asp-action="Login">
+        <label class="col-form-label" asp-for="Username"></label>
+        <input type="text" asp-for="Username"/>
+        <label class="col-form-label" asp-for="Password"></label>
+        <input type="password" asp-for="Password"/>
+        <label class="col-form-label" asp-for="RememberMe"></label>
+        <input type="checkbox" asp-for="RememberMe"/>
+        <input type="submit" name="login"/>
+    </form>
 </div>
