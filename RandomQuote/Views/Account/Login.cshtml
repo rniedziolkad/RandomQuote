@@ -8,10 +8,14 @@
     <form method="post" asp-action="Login">
         <label class="col-form-label" asp-for="Username"></label>
         <input type="text" asp-for="Username"/>
+        <span asp-validation-for="Username" class="text-danger"></span>
         <label class="col-form-label" asp-for="Password"></label>
         <input type="password" asp-for="Password"/>
+        <span asp-validation-for="Password" class="text-danger"></span>
         <label class="col-form-label" asp-for="RememberMe"></label>
         <input type="checkbox" asp-for="RememberMe"/>
-        <input type="submit" name="login"/>
+        <span asp-validation-for="RememberMe" class="text-danger"></span>
+        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl"/>
+        <input type="submit" name="Login" value="Login"/>
     </form>
 </div>

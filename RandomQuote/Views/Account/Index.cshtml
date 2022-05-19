@@ -4,4 +4,8 @@
 
 <div class="text-center">
     <h1 class="display-4">Profile Here</h1>
+    <h3>Only if authorized</h3>
+    <form asp-controller="Account" asp-action="Logout" method="post">
+        <input type="submit" value="Logout"/>
+    </form>
 </div>

@@ -10,7 +10,7 @@ public class AccountController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
-
+    
     public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
     {
         _userManager = userManager;
@@ -18,16 +18,27 @@ public class AccountController : Controller
     }
 
     // GET: /Account
-    //[Authorize]
+    [Authorize(Roles = "User")]
     public IActionResult Index()
     {
-        Console.WriteLine(HttpContext.User);
+        if (User.Identity == null)
+        {
+            return View();
+        }
+        Console.WriteLine(User.Identity.Name);
+        Console.WriteLine(User.Identity.IsAuthenticated);
+        Console.WriteLine(User.IsInRole("User"));
+
         return View();
+
+
     }
 
     //GET: /Account/Login
-    public IActionResult Login()
+    public IActionResult Login(string? returnUrl)
     {
+        if(!string.IsNullOrEmpty(returnUrl))
+            ViewBag.ReturnUrl = returnUrl;
         return View();
     }
 
@@ -42,11 +53,11 @@ public class AccountController : Controller
     {
         return View();
     }
-
+    //POST: /Account/Login
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl)
+    public async Task<IActionResult> Login(LoginViewModel model, [Bind("returnUrl")] string? returnUrl)
     {
         if (!ModelState.IsValid)
         {
@@ -61,8 +72,9 @@ public class AccountController : Controller
         if (result == SignInResult.Success)
         {
             Console.WriteLine("Success Login");
-            if (!String.IsNullOrEmpty(returnUrl))
+            if (!string.IsNullOrEmpty(returnUrl))
             {
+                Console.WriteLine("Redirecting back");
                 return Redirect(returnUrl);
             }
 
@@ -70,10 +82,43 @@ public class AccountController : Controller
         }
         else if (result == SignInResult.Failed)
         {
-            Console.WriteLine("Filed login");
+            Console.WriteLine("Failed login");
             ModelState.AddModelError("","Invalid login or password!");
         }
         
         return View();
+    }
+    //POST: /Account/Register
+    [HttpPost]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register(RegisterViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View();
+        }
+        Console.WriteLine("Register");
+        Console.WriteLine(model.Email);
+        Console.WriteLine(model.Username);
+        Console.WriteLine(model.Password);
+        User user = new User {Email = model.Email, UserName = model.Username};
+        var result = await _userManager.CreateAsync(user, model.Password);
+        if (result.Succeeded)
+        {
+            Console.WriteLine("Success Register");
+            await _userManager.AddToRoleAsync(user, "User");
+            return RedirectToAction("Login");
+        }
+        Console.WriteLine(result.Errors);
+        return View();
+    }
+    //POST: /Account/Logout
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home");
     }
 }
