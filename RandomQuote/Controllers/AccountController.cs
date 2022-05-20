@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using RandomQuote.Models;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -29,8 +28,9 @@ public class AccountController : Controller
         Console.WriteLine(User.Identity.Name);
         Console.WriteLine(User.Identity.IsAuthenticated);
         Console.WriteLine(User.IsInRole("User"));
+        var user = _userManager.GetUserAsync(User).Result;
 
-        return View();
+        return View(user);
 
 
     }
@@ -49,9 +49,15 @@ public class AccountController : Controller
         return View();
     }
 
-    //GET: /Account/Visit/id
-    public IActionResult Visit(string id)
+    //GET: /Account/Visit/username
+    [Route("/Account/Visit/{username}")]
+    public IActionResult Visit(string username)
     {
+        var user = _userManager.FindByNameAsync(username).Result;
+        if (user == null)
+        {
+            return new NotFoundResult();
+        }
         return View();
     }
     //POST: /Account/Login

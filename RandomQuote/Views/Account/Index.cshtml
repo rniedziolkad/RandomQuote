@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> _signInManager
 @inject UserManager<User> _userManager
-
+@model User
 @{
     if (_signInManager.IsSignedIn(User))
     {
@@ -11,11 +11,14 @@
     {
         ViewData["Title"] = "Account";
     }
-        
-    
 }
 
 <div class="text-center">
     <h1 class="display-4">Profile Here</h1>
     <h3>Only if authorized</h3>
+    <p>Username: @Model.UserName</p>
+    <p>First Name: @Model.FirstName</p>
+    <p>Last Name: @Model.LastName</p>
+    <p>Sex: @Model.Sex</p>
+    <p>Email: @Model.Email</p>
 </div>
