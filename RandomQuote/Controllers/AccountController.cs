@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RandomQuote.Models;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -85,7 +86,8 @@ public class AccountController : Controller
             Console.WriteLine("Failed login");
             ModelState.AddModelError("","Invalid login or password!");
         }
-        
+        if(!string.IsNullOrEmpty(returnUrl))
+            ViewBag.ReturnUrl = returnUrl;
         return View();
     }
     //POST: /Account/Register
@@ -98,19 +100,40 @@ public class AccountController : Controller
         {
             return View();
         }
-        Console.WriteLine("Register");
-        Console.WriteLine(model.Email);
-        Console.WriteLine(model.Username);
-        Console.WriteLine(model.Password);
-        User user = new User {Email = model.Email, UserName = model.Username};
+        var user = new User {Email = model.Email, UserName = model.Username};
         var result = await _userManager.CreateAsync(user, model.Password);
         if (result.Succeeded)
         {
-            Console.WriteLine("Success Register");
             await _userManager.AddToRoleAsync(user, "User");
+            TempData["Message"] = "Successfully Registered";
             return RedirectToAction("Login");
         }
-        Console.WriteLine(result.Errors);
+        foreach(var error in result.Errors.Reverse())
+        {
+            switch (error.Code)
+            {
+                case "DuplicateEmail":
+                    ModelState.AddModelError("Email", error.Description);
+                    break;
+                case "DuplicateUserName":
+                    ModelState.AddModelError("Username", error.Description);
+                    break;
+                case "InvalidUserName":
+                    ModelState.AddModelError("Username", error.Description);
+                    break;
+                default:
+                    if (error.Code.StartsWith("Password"))
+                    {
+                        ModelState.AddModelError("Password", error.Description);
+                    }
+                    else
+                    {
+                        Console.WriteLine(error.Description);
+                    }
+                    break;
+            }
+                
+        }
         return View();
     }
     //POST: /Account/Logout

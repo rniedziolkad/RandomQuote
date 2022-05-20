@@ -5,6 +5,13 @@
 
 <div class="text-center">
     <h1 class="display-4">Login Here</h1>
+    @{
+        if (TempData["Message"]!=null)
+        {
+            <h3 class="text-info">@TempData["Message"]</h3>
+        }
+    }
+    
     <form method="post" asp-action="Login">
         <label class="col-form-label" asp-for="Username"></label>
         <input type="text" asp-for="Username"/>
@@ -16,6 +23,6 @@
         <input type="checkbox" asp-for="RememberMe"/>
         <span asp-validation-for="RememberMe" class="text-danger"></span>
         <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl"/>
-        <input type="submit" name="Login" value="Login"/>
+        <input type="submit" name="Login" value="Log In"/>
     </form>
 </div>
