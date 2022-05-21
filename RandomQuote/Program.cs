@@ -10,6 +10,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = true;
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
 }).AddEntityFrameworkStores<RandomDbContext>();
 
 builder.Services.AddDbContext<RandomDbContext>(options =>

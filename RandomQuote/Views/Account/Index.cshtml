@@ -14,11 +14,48 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Profile Here</h1>
+    <h1 class="display-4">@Model.UserName</h1>
     <h3>Only if authorized</h3>
-    <p>Username: @Model.UserName</p>
-    <p>First Name: @Model.FirstName</p>
-    <p>Last Name: @Model.LastName</p>
-    <p>Sex: @Model.Sex</p>
-    <p>Email: @Model.Email</p>
+    <div id="emailContent">
+        <form id="formEmail" method="post" asp-controller="Account" asp-action="EditEmail" onreset="cancelEmail()">
+            <label class="col-form-label" asp-for="Email"></label>
+            <input type="email" asp-for="Email" disabled/>
+            <span asp-validation-for="Email" class="text-danger"></span>
+            <button id="cancelEditEmail" type="reset" class="btn btn-danger m-2" hidden disabled>Cancel</button>
+            <button id="submitEditEmail" type="submit" class="btn btn-primary m-2" hidden disabled>Save</button>
+            <button id="btnEditEmail" type="button" class="btn btn-warning m-2 editBtn" onclick="editEmail()">Edit</button>
+        </form>
+    </div>
+    <div id="AboutMeContent">
+        <h4>About me</h4>
+        <form id="formUserInfo" asp-controller="Account" asp-action="EditUserInfo" onreset="cancelEditInfo()">
+            <label class="col-form-label" asp-for="FirstName"></label>
+            <input type="text" asp-for="FirstName" class="iUserInfo" disabled/>
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+            <br/>
+            <label class="col-form-label" asp-for="LastName"></label>
+            <input type="text" asp-for="LastName" class="iUserInfo" disabled/>
+            <span asp-validation-for="LastName" class="text-danger"></span>
+            <br/>
+            <label class="col-form-label" asp-for="Sex"></label>
+            <select asp-for="Sex" class="iUserInfo" disabled>
+                <option value="">Don't specify</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <span asp-validation-for="Sex" class="text-danger"></span>
+            <br/>
+            <label class="col-form-label" asp-for="Description"></label>
+            <br/>
+            <textarea asp-for="Description" class="iUserInfo" rows="10" cols="40" disabled></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+            <br/>
+            <button id="cancelEditUserInfo" type="reset" class="btn btn-danger m-2" hidden disabled>Cancel</button>
+            <button id="submitEditUserInfo" type="submit" class="btn btn-primary m-2" hidden disabled>Save</button>
+            <button id="btnEditUserInfo" type="button" class="btn btn-warning m-2 editBtn" onclick="editUserInfo()">Edit</button>
+        </form>
+    </div>
+    
+    
+    
 </div>

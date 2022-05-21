@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RandomQuote.Models;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -25,14 +27,9 @@ public class AccountController : Controller
         {
             return View();
         }
-        Console.WriteLine(User.Identity.Name);
-        Console.WriteLine(User.Identity.IsAuthenticated);
-        Console.WriteLine(User.IsInRole("User"));
         var user = _userManager.GetUserAsync(User).Result;
 
         return View(user);
-
-
     }
 
     //GET: /Account/Login
@@ -149,4 +146,38 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Index", "Home");
     }
+    //POST: /Account/EditEmail
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public IActionResult EditEmail(string email)
+    {
+        if (ModelState.IsValid)
+        {
+            return Json(email);
+        }
+
+        return Json(ModelState);
+    }
+    //POST: /Account/EditUserInfo
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public IActionResult EditUserInfo([Bind("FirstName,LastName,Sex,Description")] User userInfo)
+    {
+        if (ModelState.IsValid)
+        {
+            return Json(userInfo);
+        }
+
+        Dictionary<string, ModelErrorCollection> response = new Dictionary<string, ModelErrorCollection>();
+        foreach (var x in ModelState)
+        {
+            response.Add(x.Key, x.Value.Errors);
+        }
+        return Json(response);
+
+    }
+    
+
 }
