@@ -6,6 +6,7 @@ namespace RandomQuote.Models;
 public class LoginViewModel
 {
     [Required]
+    [DisplayName("Login")]
     public string? Username { get; set; }
     [Required]
     [PasswordPropertyText]

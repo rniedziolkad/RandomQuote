@@ -89,8 +89,7 @@ public class AccountController : Controller
         }
         else if (result == SignInResult.Failed)
         {
-            Console.WriteLine("Failed login");
-            ModelState.AddModelError("","Invalid login or password!");
+            ModelState.AddModelError("Failed", "Invalid username or password");
         }
         if(!string.IsNullOrEmpty(returnUrl))
             ViewBag.ReturnUrl = returnUrl;
