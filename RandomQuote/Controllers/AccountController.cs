@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RandomQuote.Models;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -150,32 +149,64 @@ public class AccountController : Controller
     [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
-    public IActionResult EditEmail(string email)
+    public async Task<IActionResult> EditEmail(string email)
     {
         if (ModelState.IsValid)
         {
-            return Json(email);
+            var user = await _userManager.GetUserAsync(User);
+            var result = await _userManager.SetEmailAsync(user, email);
+            if (result.Succeeded)
+            {
+                TempData["EditSuccess"] = "Successfully updated email";
+                return Json(new {succeeded = true, data=email});
+            }
+            //If there are errors add them to Model State
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code.EndsWith("Email") ? "Email" : error.Code, error.Description);
+            }
         }
-
-        return Json(ModelState);
+        //Extract errors from Model State in convenient format
+        var errors = new Dictionary<string, ModelErrorCollection>();
+        foreach (var (key, value) in ModelState)
+        {
+            errors[key] = value.Errors;
+        }
+        return Json(new{succeeded = false, errors, data=email});
     }
     //POST: /Account/EditUserInfo
     [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
-    public IActionResult EditUserInfo([Bind("FirstName,LastName,Sex,Description")] User userInfo)
+    public async Task<IActionResult> EditUserInfo(EditUserInfoModel userInfo)
     {
         if (ModelState.IsValid)
         {
-            return Json(userInfo);
+            var user = await _userManager.GetUserAsync(User);
+            user.FirstName = userInfo.FirstName;
+            user.LastName = userInfo.LastName;
+            user.Sex = userInfo.Sex;
+            user.Description = userInfo.Description;
+            
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                TempData["EditSuccess"] = "Successfully updated user information";
+                return Json(new{succeeded = true, data=userInfo});
+            }
+            //If there are errors add them to Model State
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
         }
-
-        Dictionary<string, ModelErrorCollection> response = new Dictionary<string, ModelErrorCollection>();
-        foreach (var x in ModelState)
+        //Extract errors from Model State in convenient format
+        var errors = new Dictionary<string, ModelErrorCollection>();
+        foreach (var (key, value) in ModelState)
         {
-            response.Add(x.Key, x.Value.Errors);
+            errors[key] = value.Errors;
         }
-        return Json(response);
+        return Json(new{succeeded = false, errors, data=userInfo});
 
     }
     

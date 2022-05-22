@@ -15,20 +15,31 @@
 
 <div class="text-center">
     <h1 class="display-4">@Model.UserName</h1>
-    <h3>Only if authorized</h3>
+    @{
+        if (TempData["EditSuccess"] != null)
+        {
+            <h4 id="notificationMessage">
+                <script>
+                     window.onload = function(){
+                         showNotification('@TempData["EditSuccess"]');
+                     }
+                 </script>
+            </h4>
+        }
+    }
     <div id="emailContent">
-        <form id="formEmail" method="post" asp-controller="Account" asp-action="EditEmail" onreset="cancelEmail()">
+        <form id="formEmail" method="post" asp-controller="Account" asp-action="EditEmail" onreset="exitEmail()">
             <label class="col-form-label" asp-for="Email"></label>
             <input type="email" asp-for="Email" disabled/>
             <span asp-validation-for="Email" class="text-danger"></span>
             <button id="cancelEditEmail" type="reset" class="btn btn-danger m-2" hidden disabled>Cancel</button>
-            <button id="submitEditEmail" type="submit" class="btn btn-primary m-2" hidden disabled>Save</button>
+            <button id="submitEditEmail" type="button" class="btn btn-primary m-2" onclick="submitEmail()" hidden disabled>Save</button>
             <button id="btnEditEmail" type="button" class="btn btn-warning m-2 editBtn" onclick="editEmail()">Edit</button>
         </form>
     </div>
     <div id="AboutMeContent">
         <h4>About me</h4>
-        <form id="formUserInfo" asp-controller="Account" asp-action="EditUserInfo" onreset="cancelEditInfo()">
+        <form id="formUserInfo" asp-controller="Account" asp-action="EditUserInfo" onreset="exitUserInfo()">
             <label class="col-form-label" asp-for="FirstName"></label>
             <input type="text" asp-for="FirstName" class="iUserInfo" disabled/>
             <span asp-validation-for="FirstName" class="text-danger"></span>
@@ -48,10 +59,11 @@
             <label class="col-form-label" asp-for="Description"></label>
             <br/>
             <textarea asp-for="Description" class="iUserInfo" rows="10" cols="40" disabled></textarea>
+            <br/>
             <span asp-validation-for="Description" class="text-danger"></span>
             <br/>
             <button id="cancelEditUserInfo" type="reset" class="btn btn-danger m-2" hidden disabled>Cancel</button>
-            <button id="submitEditUserInfo" type="submit" class="btn btn-primary m-2" hidden disabled>Save</button>
+            <button id="submitEditUserInfo" type="button" class="btn btn-primary m-2" onclick="submitUserInfo()" hidden disabled>Save</button>
             <button id="btnEditUserInfo" type="button" class="btn btn-warning m-2 editBtn" onclick="editUserInfo()">Edit</button>
         </form>
     </div>

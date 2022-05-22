@@ -1,22 +1,9 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-function editUsername() {
-    document.getElementById("btnEditUsername").hidden = true;
-    document.getElementById("submitUsername").hidden = false;
-    document.getElementById("UserName").disabled = false;
-    /*let token = document.getElementsByName("__RequestVerificationToken")[0].value;
-    $.ajax({
-        url: "/Account/EditUsername",
-        headers: { "RequestVerificationToken": token },
-        success: function(response){
-            document.getElementById("usernameContent").innerHTML = response;
-        }
-    });*/
-}
-
-function acceptFormUsername(){
-    alert("Sending POST!")
+﻿function clearValidationErrors(){
+    for(let validationField of document.querySelectorAll('[data-valmsg-for]')){
+        validationField.innerHTML = "";
+        validationField.classList.add("field-validation-valid");
+        validationField.classList.remove("field-validation-error");
+    }
 }
 
 function editEmail(){
@@ -34,7 +21,7 @@ function editEmail(){
     document.getElementById("Email").disabled = false;
 }
 
-function cancelEmail(){
+function exitEmail(){
     let submit = document.getElementById("submitEditEmail");
     submit.hidden = true;
     submit.disabled = true;
@@ -47,6 +34,47 @@ function cancelEmail(){
         editBtn.disabled = false;
     }
     document.getElementById("Email").disabled = true;
+    clearValidationErrors();
+}
+function submitEmail(){
+    let data = $("#formEmail").serialize();
+    $.ajax({
+        type: "POST",
+        url: '/Account/EditEmail',
+        data: data,
+        dataType: "json",
+        success: function (response) {
+            if(response["succeeded"]){
+                location.reload();
+            }
+            else{
+                let errors = response.errors;
+                for(let key in errors){
+                    let errorSummary = "";
+                    for(let innerError of errors[key]){
+                        errorSummary+=innerError["errorMessage"]+"\n";
+                    }
+                    if(key==="email"){
+                        let valFields = document.querySelectorAll('[data-valmsg-for="Email"]')
+                        for(let valField of valFields){
+                            valField.classList.remove("field-validation-valid");
+                            valField.classList.add("field-validation-error");
+                            valField.innerHTML = errorSummary;
+                        }
+                    }
+                    else{
+                        console.error(key+"\n"+errorSummary)
+                    }
+                    
+                }
+                
+            }
+        },
+        error: function(xhr){
+            alert(xhr.statusText+":" + xhr.status);
+            location.reload();
+        }
+    });
 }
 function editUserInfo(){
     let editBtns = document.getElementsByClassName("editBtn");
@@ -66,7 +94,7 @@ function editUserInfo(){
     cancel.disabled = false;
 }
 
-function cancelEditInfo(){
+function exitUserInfo(){
     let editBtns = document.getElementsByClassName("editBtn");
     for(const editBtn of editBtns){
         editBtn.hidden = false;
@@ -82,4 +110,77 @@ function cancelEditInfo(){
     let cancel = document.getElementById("cancelEditUserInfo");
     cancel.hidden = true;
     cancel.disabled = true;
+    clearValidationErrors();
+}
+
+function submitUserInfo(){
+    let data = $("#formUserInfo").serialize();
+    $.ajax({
+        type: "POST",
+        url: '/Account/EditUserInfo',
+        data: data,
+        dataType: "json",
+        success: function (response) {
+            if(response["succeeded"]){
+                location.reload();
+            }
+            else{
+                let errors = response.errors;
+                for(let key in errors){
+                    let errorSummary = "";
+                    for(let innerError of errors[key]){
+                        errorSummary+=innerError["errorMessage"]+"\n";
+                    }
+                    if(key==="Sex"){
+                        let valFields = document.querySelectorAll('[data-valmsg-for="Sex"]')
+                        for(let valField of valFields){
+                            valField.classList.remove("field-validation-valid");
+                            valField.classList.add("field-validation-error");
+                            valField.innerHTML = errorSummary;
+                        }
+                    }
+                    if(key==="FirstName"){
+                        let valFields = document.querySelectorAll('[data-valmsg-for="FirstName"]')
+                        for(let valField of valFields){
+                            valField.classList.remove("field-validation-valid");
+                            valField.classList.add("field-validation-error");
+                            valField.innerHTML = errorSummary;
+                        }
+                    }
+                    if(key==="LastName"){
+                        let valFields = document.querySelectorAll('[data-valmsg-for="LastName"]')
+                        for(let valField of valFields){
+                            valField.classList.remove("field-validation-valid");
+                            valField.classList.add("field-validation-error");
+                            valField.innerHTML = errorSummary;
+                        }
+                    }
+                    if(key==="Description"){
+                        let valFields = document.querySelectorAll('[data-valmsg-for="Description"]')
+                        for(let valField of valFields){
+                            valField.classList.remove("field-validation-valid");
+                            valField.classList.add("field-validation-error");
+                            valField.innerHTML = errorSummary;
+                        }
+                    }
+                    else{
+                        console.error(key+"\n"+errorSummary)
+                    }
+
+                }
+
+            }
+        },
+        error: function(xhr){
+            alert(xhr.statusText+":" + xhr.status);
+            location.reload();
+        }
+    });
+}
+
+function showNotification(message){
+    document.getElementById("notificationMessage").innerHTML = message;
+    setTimeout(function(){
+        document.getElementById("notificationMessage").remove();
+    }, 5000);
 }

@@ -7,11 +7,11 @@ public class LoginViewModel
 {
     [Required]
     [DisplayName("Login")]
-    public string? Username { get; set; }
+    public string? Username { get; init; }
     [Required]
     [PasswordPropertyText]
-    public string? Password { get; set; }
+    public string? Password { get; init; }
     [Required]
     [DisplayName("Remember Me")]
-    public bool RememberMe { get; set; }
+    public bool RememberMe { get; init; }
 }
