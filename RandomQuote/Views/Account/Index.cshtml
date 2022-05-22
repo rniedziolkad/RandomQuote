@@ -32,6 +32,7 @@
             <label class="col-form-label" asp-for="Email"></label>
             <input type="email" asp-for="Email" disabled/>
             <span asp-validation-for="Email" class="text-danger"></span>
+            <br/>
             <button id="cancelEditEmail" type="reset" class="btn btn-danger m-2" hidden disabled>Cancel</button>
             <button id="submitEditEmail" type="button" class="btn btn-primary m-2" onclick="submitEmail()" hidden disabled>Save</button>
             <button id="btnEditEmail" type="button" class="btn btn-warning m-2 editBtn" onclick="editEmail()">Edit</button>

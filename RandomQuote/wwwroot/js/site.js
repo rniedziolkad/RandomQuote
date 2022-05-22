@@ -177,10 +177,23 @@ function submitUserInfo(){
         }
     });
 }
-
 function showNotification(message){
-    document.getElementById("notificationMessage").innerHTML = message;
-    setTimeout(function(){
-        document.getElementById("notificationMessage").remove();
-    }, 5000);
+    let notification = document.getElementById("notificationMessage");
+    if(notification!=null){
+        notification.innerHTML = message;
+        notification.addEventListener("click", closeNotification, true);
+        notification.addEventListener("mouseenter", function(){
+            notification.style.color = "#555";
+        }, true);
+        notification.addEventListener("mouseleave", function(){
+            notification.style.color = "#000";
+        }, true);
+        setTimeout(closeNotification, 5000);
+    }
+}
+function closeNotification(){
+    let notification = document.getElementById("notificationMessage");
+    if(notification!=null){
+        notification.remove();
+    }
 }

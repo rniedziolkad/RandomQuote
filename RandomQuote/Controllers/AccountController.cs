@@ -54,7 +54,7 @@ public class AccountController : Controller
         {
             return new NotFoundResult();
         }
-        return View();
+        return View(user);
     }
     //POST: /Account/Login
     [HttpPost]

@@ -1,7 +1,27 @@
-﻿@{
+﻿@model User
+@{
     ViewData["Title"] = "Profile";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Visit Profile Here</h1>
+    <h1 class="display-4">@Model.UserName</h1>
+    @{
+        if (Model.FirstName != null)
+        {
+            <p><b>First name: </b>@Model.FirstName</p>
+        }
+        if (Model.LastName != null)
+        {
+            <p><b>Last name: </b>@Model.LastName</p>
+        }
+        if (Model.Sex != null)
+        {
+            <p><b>Sex: </b>@Model.Sex</p>
+        }
+        if (Model.Description != null)
+        {
+            <p><b>Description: </b></p>
+            <p><i>@Model.Description</i></p>
+        }
+    }
 </div>
