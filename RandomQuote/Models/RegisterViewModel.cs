@@ -16,6 +16,7 @@ public class RegisterViewModel
     [MinLength(6, ErrorMessage = "Password needs to be at least 6 characters long")]
     public string? Password { get; init; }
     [Compare("Password")]
+    [PasswordPropertyText]
     [DisplayName("Confirm password")]
     public string? ConfirmPassword { get; init; }
 }

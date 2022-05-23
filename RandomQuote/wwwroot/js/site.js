@@ -7,9 +7,9 @@
 }
 
 function editEmail(){
+    document.getElementById("btnEditEmail").hidden = true;
     let editBtns = document.getElementsByClassName("editBtn");
     for(const editBtn of editBtns){
-        editBtn.hidden = true;
         editBtn.disabled = true;
     }
     let submit = document.getElementById("submitEditEmail");
@@ -22,6 +22,7 @@ function editEmail(){
 }
 
 function exitEmail(){
+    document.getElementById("btnEditEmail").hidden = false;
     let submit = document.getElementById("submitEditEmail");
     submit.hidden = true;
     submit.disabled = true;
@@ -30,7 +31,6 @@ function exitEmail(){
     cancel.disabled = true;
     let editBtns = document.getElementsByClassName("editBtn");
     for(const editBtn of editBtns){
-        editBtn.hidden = false;
         editBtn.disabled = false;
     }
     document.getElementById("Email").disabled = true;
@@ -77,9 +77,9 @@ function submitEmail(){
     });
 }
 function editUserInfo(){
+    document.getElementById("btnEditUserInfo").hidden = true;
     let editBtns = document.getElementsByClassName("editBtn");
     for(const editBtn of editBtns){
-        editBtn.hidden = true;
         editBtn.disabled = true;
     }
     let inputs = document.getElementsByClassName("iUserInfo");
@@ -95,9 +95,9 @@ function editUserInfo(){
 }
 
 function exitUserInfo(){
+    document.getElementById("btnEditUserInfo").hidden = false;
     let editBtns = document.getElementsByClassName("editBtn");
     for(const editBtn of editBtns){
-        editBtn.hidden = false;
         editBtn.disabled = false;
     }
     let inputs = document.getElementsByClassName("iUserInfo");
@@ -196,4 +196,11 @@ function closeNotification(){
     if(notification!=null){
         notification.remove();
     }
+}
+
+function editPassword(){
+    window.location.replace("/Account/ChangePassword");
+}
+function exitEditPassword(){
+    window.location.replace("/Account");
 }

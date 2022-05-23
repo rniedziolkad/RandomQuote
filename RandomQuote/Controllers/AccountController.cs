@@ -207,6 +207,51 @@ public class AccountController : Controller
             errors[key] = value.Errors;
         }
         return Json(new{succeeded = false, errors, data=userInfo});
+    }
+    //GET: /Account/ChangePassword
+    [HttpGet]
+    [Authorize]
+    public IActionResult ChangePassword()
+    {
+        return View();
+    }
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View();
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+        var result = await _userManager.ChangePasswordAsync(user, model.Password, model.NewPassword);
+        if (result.Succeeded)
+        {
+            TempData["EditSuccess"] = "Successfully updated password";
+            return RedirectToAction("Index");
+        }
+
+        foreach (var error in result.Errors.Reverse())
+        {
+            switch (error.Code)
+            {
+                case "PasswordMismatch":
+                    ModelState.AddModelError("Password", error.Description);
+                    break;
+                default:
+                    if (error.Code.StartsWith("Password"))
+                    {
+                        ModelState.AddModelError("NewPassword", error.Description);
+                    }
+                    break;
+            }
+            Console.WriteLine(error.Code);
+            Console.WriteLine(error.Description);
+        }
+
+        return View();
 
     }
     

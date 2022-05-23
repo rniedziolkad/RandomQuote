@@ -28,6 +28,7 @@
         }
     }
     <div id="emailContent">
+        <h4>Email</h4>
         <form id="formEmail" method="post" asp-controller="Account" asp-action="EditEmail" onreset="exitEmail()">
             <label class="col-form-label" asp-for="Email"></label>
             <input type="email" asp-for="Email" disabled/>
@@ -37,6 +38,10 @@
             <button id="submitEditEmail" type="button" class="btn btn-primary m-2" onclick="submitEmail()" hidden disabled>Save</button>
             <button id="btnEditEmail" type="button" class="btn btn-warning m-2 editBtn" onclick="editEmail()">Edit</button>
         </form>
+    </div>
+    <div id="passwordContent">
+        <h4>Password</h4>
+        <button id="btnEditPassword" type="button" class="btn btn-warning m-2 editBtn" onclick="editPassword()">Edit</button>
     </div>
     <div id="AboutMeContent">
         <h4>About me</h4>
