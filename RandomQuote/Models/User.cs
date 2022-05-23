@@ -13,5 +13,6 @@ public class User : IdentityUser
     [RegularExpression("Male|Female", ErrorMessage = "Invalid sex")]
     public string? Sex { get; set; }
     public string? Description { get; set; }
-    
+    public virtual ICollection<QuoteModel> MyQuotes { get; } = new List<QuoteModel>();
+
 }

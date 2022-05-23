@@ -12,5 +12,5 @@ public class RandomDbContext : IdentityDbContext<User>
     public RandomDbContext(DbContextOptions<RandomDbContext> opts) : base(opts)
     {
     }
-    public virtual DbSet<QuoteModel>? Quotes { get; set; }
+    public DbSet<QuoteModel>? Quotes { get; set; } 
 }

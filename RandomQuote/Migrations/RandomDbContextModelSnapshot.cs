@@ -166,7 +166,7 @@ namespace RandomQuote.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Quotes");
+                    b.ToTable("Quotes", (string)null);
                 });
 
             modelBuilder.Entity("RandomQuote.Models.User", b =>

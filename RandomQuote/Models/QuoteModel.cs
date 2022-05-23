@@ -7,10 +7,9 @@ public class QuoteModel
 {
     [Key]
     public int QuoteId { get; set; }
-    public string? Author { get; set; }
-    [Required]
+    public string? Author { get; init; }
     public User? User { get; set; }
     [Required]
-    public string? Quote { get; set; }
+    public string? Quote { get; init; }
     
 }
