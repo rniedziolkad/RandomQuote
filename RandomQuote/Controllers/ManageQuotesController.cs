@@ -17,22 +17,24 @@ public class ManageQuotesController : Controller
         _randomDbContext = randomDbContext;
     }
     
-    // GET
+    //GET: /ManageQuotes
     public IActionResult Index()
     {
-        return View();
+        var user = _userManager.GetUserAsync(User).Result;
+        _randomDbContext.Quotes?.Where(q=>q.User == user).Load();
+        return View(user);
     }
-    //GET: /Account/AddQuote
+    //GET: /ManageQuotes/AddQuote
     [HttpGet]
     [Authorize]
-    public IActionResult AddQuote()
+    public IActionResult Add()
     {
         return View();
     }
     //POST: /Account/AddQuote
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> AddQuote([Bind("Author,Quote")]QuoteModel model)
+    public async Task<IActionResult> Add([Bind("Author,Quote")]QuoteModel model)
     {
         Console.WriteLine(model.Author);
         Console.WriteLine(model.Quote);
@@ -45,15 +47,12 @@ public class ManageQuotesController : Controller
                 TempData["Error"] = "Failed adding data to database";
                 return View();
             }
-            await _randomDbContext.Quotes.Where(q => q.User == user).LoadAsync();
-            user.MyQuotes.Add(model);
+
+            model.User = user;
+            _randomDbContext.Quotes.Add(model);
             await _randomDbContext.SaveChangesAsync();
-            Console.WriteLine("User quotes:");
-            foreach (var quote in user.MyQuotes)
-            {
-                Console.WriteLine(quote.Author+":"+quote.Quote);
-            }
-            return View();
+            TempData["Success"] = "Successfully added quote";
+            return RedirectToAction("Index");
         }
 
         foreach (var error in ModelState)
@@ -66,5 +65,34 @@ public class ManageQuotesController : Controller
             
         }
         return View();
+    }
+    //GET: /ManageQuotes/Edit
+    [HttpGet]
+    [Authorize]
+    public IActionResult Edit(int id)
+    {
+        var q = _randomDbContext.Quotes?.Find(id);
+        if (q == null)
+        {
+            return NotFound();
+        }
+        var loggedUser = _userManager.GetUserAsync(User).Result;
+        if (q?.User != loggedUser)
+        {
+            return Forbid();
+        }
+        return View(q);
+    }
+    //POST: /ManageQuotes/AddQuote
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit([Bind("QuoteId,Author,Quote")]QuoteModel model)
+    {
+        if (!ModelState.IsValid) return View();
+        
+        _randomDbContext.Entry(model).State = EntityState.Modified;
+        _randomDbContext.SaveChangesAsync();
+        return RedirectToAction("Index");
     }
 }
