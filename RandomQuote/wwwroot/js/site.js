@@ -204,3 +204,26 @@ function editPassword(){
 function exitEditPassword(){
     window.location.replace("/Account");
 }
+
+function deleteQuote(){
+    let data = $("#QuoteId").serialize();
+    $.ajax({
+        type: "DELETE",
+        url: "/ManageQuotes/Delete",
+        headers: {"RequestVerificationToken" : $('input[name="__RequestVerificationToken"]').val()},
+        data: data,
+        dataType: "json",
+        success: function (response) {
+            if(response["succeeded"]){
+                location.href = "/ManageQuotes";
+            }
+            else{
+                alert("Error deleting");
+            }
+        },
+        error: function (xhr){
+            alert(xhr.statusText+":" + xhr.status);
+            location.reload();
+        }
+    });
+}

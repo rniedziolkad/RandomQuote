@@ -31,9 +31,10 @@ public class ManageQuotesController : Controller
     {
         return View();
     }
-    //POST: /Account/AddQuote
+    //POST: /Account/Add
     [Authorize]
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Add([Bind("Author,Quote")]QuoteModel model)
     {
         Console.WriteLine(model.Author);
@@ -77,13 +78,13 @@ public class ManageQuotesController : Controller
             return NotFound();
         }
         var loggedUser = _userManager.GetUserAsync(User).Result;
-        if (q?.User != loggedUser)
+        if (q.User != loggedUser)
         {
-            return Forbid();
+            return new ForbidResult();
         }
         return View(q);
     }
-    //POST: /ManageQuotes/AddQuote
+    //POST: /ManageQuotes/Edit
     [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
@@ -94,5 +95,33 @@ public class ManageQuotesController : Controller
         _randomDbContext.Entry(model).State = EntityState.Modified;
         _randomDbContext.SaveChangesAsync();
         return RedirectToAction("Index");
+    }
+    //DELETE: /ManageQuotes/Delete
+    [HttpDelete]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int quoteId)
+    {
+        Console.WriteLine("Deleting"+quoteId);
+        if (_randomDbContext.Quotes == null) return Json(new {succeeded = false, data = quoteId});
+        
+        var q = await _randomDbContext.Quotes.FindAsync(quoteId);
+        if (q == null)
+        {
+            return NotFound();
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+        if (q.User != user)
+        {
+            Console.WriteLine(q);
+            Console.WriteLine(user);
+            return new ForbidResult();
+        }
+        _randomDbContext.Entry(q).State = EntityState.Deleted;
+        await _randomDbContext.SaveChangesAsync();
+        TempData["Success"] = "Successfully deleted quote";
+        return Json(new {succeeded = true, data = quoteId});
+
     }
 }
