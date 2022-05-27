@@ -71,18 +71,12 @@ public class AccountController : Controller
         {
             return View();
         }
-
-        Console.WriteLine("Logging In");
-        Console.WriteLine(model.Username);
-        Console.WriteLine(model.Password);
-
+        
         var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
         if (result == SignInResult.Success)
         {
-            Console.WriteLine("Success Login");
             if (!string.IsNullOrEmpty(returnUrl))
             {
-                Console.WriteLine("Redirecting back");
                 return Redirect(returnUrl);
             }
 
