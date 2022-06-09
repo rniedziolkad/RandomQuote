@@ -227,3 +227,56 @@ function deleteQuote(){
         }
     });
 }
+
+function LikeQuote(){
+    let data = $("#likeForm").serialize()
+    $.ajax({
+        type: "POST",
+        url: '/Home/Like',
+        data: data,
+        dataType: "json",
+        success: function (response) {
+            if(response["success"]){
+                $("#likeBtn").hide()
+                $("#delLikeBtn").show()
+                let likeElem = $("#likeCount")
+                let likes = parseInt(likeElem.html())
+                likeElem.html(likes+1)
+            }
+            else{
+                alert(response["error"])
+            }
+        },
+        error: function (xhr) {
+            if(xhr.status === 401){
+                location.href = "/Account/Login"
+            }
+        }
+    })
+}
+function delLikeQuote(){
+    let data = $("#likeForm").serialize()
+    $.ajax({
+        type: "POST",
+        url: '/Home/DeleteLike',
+        data: data,
+        dataType: "json",
+        success: function (response) {
+            if(response["success"]){
+                $("#delLikeBtn").hide()
+                $("#likeBtn").show()
+                let likeElem = $("#likeCount")
+                let likes = parseInt(likeElem.html())
+                likeElem.html(likes-1)
+            }
+            else{
+                alert(response["error"])
+            }
+        },
+        error: function (xhr) {
+            if(xhr.status === 401){
+                location.href = "/Account/Login"
+            }
+        }
+    })
+}

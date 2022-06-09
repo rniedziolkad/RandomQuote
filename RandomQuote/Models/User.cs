@@ -6,6 +6,11 @@ namespace RandomQuote.Models;
 
 public class User : IdentityUser
 {
+    public User()
+    {
+        LikedQuotes = new List<QuoteModel>();
+        MyQuotes = new List<QuoteModel>();
+    }
     [DisplayName("First Name")]
     public string? FirstName { get; set; }
     [DisplayName("Last Name")]
@@ -13,6 +18,8 @@ public class User : IdentityUser
     [RegularExpression("Male|Female", ErrorMessage = "Invalid sex")]
     public string? Sex { get; set; }
     public string? Description { get; set; }
-    public virtual ICollection<QuoteModel> MyQuotes { get; } = new List<QuoteModel>();
+    public ICollection<QuoteModel> LikedQuotes { get; }
+    public ICollection<QuoteModel> MyQuotes { get;}
+    
 
 }

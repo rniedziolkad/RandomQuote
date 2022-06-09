@@ -145,6 +145,21 @@ namespace RandomQuote.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("QuoteModelUser", b =>
+                {
+                    b.Property<int>("LikedQuotesQuoteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserLikesId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("LikedQuotesQuoteId", "UserLikesId");
+
+                    b.HasIndex("UserLikesId");
+
+                    b.ToTable("QuoteModelUser");
+                });
+
             modelBuilder.Entity("RandomQuote.Models.QuoteModel", b =>
                 {
                     b.Property<int>("QuoteId")
@@ -159,14 +174,13 @@ namespace RandomQuote.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("QuoteId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Quotes", (string)null);
+                    b.ToTable("Quotes");
                 });
 
             modelBuilder.Entity("RandomQuote.Models.User", b =>
@@ -296,15 +310,33 @@ namespace RandomQuote.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RandomQuote.Models.QuoteModel", b =>
+            modelBuilder.Entity("QuoteModelUser", b =>
                 {
-                    b.HasOne("RandomQuote.Models.User", "User")
+                    b.HasOne("RandomQuote.Models.QuoteModel", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("LikedQuotesQuoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RandomQuote.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserLikesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RandomQuote.Models.QuoteModel", b =>
+                {
+                    b.HasOne("RandomQuote.Models.User", "User")
+                        .WithMany("MyQuotes")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RandomQuote.Models.User", b =>
+                {
+                    b.Navigation("MyQuotes");
                 });
 #pragma warning restore 612, 618
         }

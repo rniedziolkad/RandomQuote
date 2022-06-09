@@ -1,15 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
 
 namespace RandomQuote.Models;
 
 public class QuoteModel
 {
+    public QuoteModel()
+    {
+        UserLikes = new List<User>();
+    }
     [Key]
-    public int QuoteId { get; set; }
+    public int QuoteId { get; init; }
     public string? Author { get; init; }
     public User? User { get; set; }
     [Required]
     public string? Quote { get; init; }
-    
+
+    public virtual ICollection<User> UserLikes { get; }
+
 }

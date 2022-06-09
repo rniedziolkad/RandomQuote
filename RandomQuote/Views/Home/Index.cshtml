@@ -1,8 +1,33 @@
-﻿@{
+﻿@model QuoteModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p><i>
+        @Model.Quote <br/>
+        <b>@Model.Author</b>
+    </i></p>
+    <p>Added by: <a href="/Account/Visit/@Model.User?.UserName">@Model.User?.UserName</a> <b><span id="likeCount">@Model.UserLikes.Count</span> Likes</b></p>
+    <form id="likeForm">
+        @Html.HiddenFor(model => model.QuoteId)
+        @Html.AntiForgeryToken()
+        @{
+            if (ViewBag.Liked)
+            {
+                <button id="likeBtn" type="button" class="btn btn-light btn-sm" onclick="LikeQuote()" style="display: none;">Like</button>
+                <button id="delLikeBtn" type="button" class="btn btn-primary btn-sm" onclick="delLikeQuote()">Remove Like</button>
+            }
+            else
+            {
+                <button id="likeBtn" type="button" class="btn btn-light btn-sm" onclick="LikeQuote()">Like</button>
+                <button id="delLikeBtn" type="button" class="btn btn-primary btn-sm" onclick="delLikeQuote()" style="display: none;">Remove Like</button>
+            }
+        }
+        
+        
+    </form>
+    
+    
+    <button class="btn btn-dark btn-lg" onclick="location.href='/'">Get Random Quote</button>
 </div>

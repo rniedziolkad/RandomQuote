@@ -21,7 +21,7 @@ public class ManageQuotesController : Controller
     public IActionResult Index()
     {
         var user = _userManager.GetUserAsync(User).Result;
-        _randomDbContext.Quotes?.Where(q=>q.User == user).Load();
+        _randomDbContext.Quotes?.Include(quote => quote.UserLikes).Where(q=>q.User == user).Load();
         return View(user);
     }
     //GET: /ManageQuotes/AddQuote
@@ -72,7 +72,8 @@ public class ManageQuotesController : Controller
     [Authorize]
     public IActionResult Edit(int id)
     {
-        var q = _randomDbContext.Quotes?.Find(id);
+        var q = _randomDbContext.Quotes?.Include(quote => quote.UserLikes)
+            .FirstOrDefault(model => model.QuoteId == id);
         if (q == null)
         {
             return NotFound();
@@ -102,7 +103,6 @@ public class ManageQuotesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int quoteId)
     {
-        Console.WriteLine("Deleting"+quoteId);
         if (_randomDbContext.Quotes == null) return Json(new {succeeded = false, data = quoteId});
         
         var q = await _randomDbContext.Quotes.FindAsync(quoteId);
@@ -114,8 +114,6 @@ public class ManageQuotesController : Controller
         var user = await _userManager.GetUserAsync(User);
         if (q.User != user)
         {
-            Console.WriteLine(q);
-            Console.WriteLine(user);
             return new ForbidResult();
         }
         _randomDbContext.Entry(q).State = EntityState.Deleted;

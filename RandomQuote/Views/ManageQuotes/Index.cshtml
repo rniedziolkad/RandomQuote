@@ -13,7 +13,7 @@
         foreach (var quote in Model.MyQuotes)
         {
             var author = quote.Author ?? Model.UserName;
-            <p><i>@quote.Quote <b>@author</b></i>
+            <p><i>@quote.Quote <b>@author</b></i> @quote.UserLikes.Count Likes
                 <button type="button" class="btn btn-warning m-2" onclick="location.href='/ManageQuotes/Edit/@quote.QuoteId'">Edit</button>
             </p>
         }
