@@ -11,6 +11,9 @@
                 <a class="btn text-dark shadow-none" asp-controller="Account" asp-action="Index">@_userManager.GetUserName(User)</a>
             </li>
             <li class="nav-item">
+                <a class="btn text-dark shadow-none" asp-controller="ManageQuotes" asp-action="Index">My Quotes</a>
+            </li>
+            <li class="nav-item">
                  <form method="post" asp-controller="Account" asp-action="Logout">
                     <input type="submit" class="btn text-dark shadow-none" value="Log Out"/>
                  </form>

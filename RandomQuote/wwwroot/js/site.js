@@ -204,3 +204,79 @@ function editPassword(){
 function exitEditPassword(){
     window.location.replace("/Account");
 }
+
+function deleteQuote(){
+    let data = $("#QuoteId").serialize();
+    $.ajax({
+        type: "DELETE",
+        url: "/ManageQuotes/Delete",
+        headers: {"RequestVerificationToken" : $('input[name="__RequestVerificationToken"]').val()},
+        data: data,
+        dataType: "json",
+        success: function (response) {
+            if(response["succeeded"]){
+                location.href = "/ManageQuotes";
+            }
+            else{
+                alert("Error deleting");
+            }
+        },
+        error: function (xhr){
+            alert(xhr.statusText+":" + xhr.status);
+            location.reload();
+        }
+    });
+}
+
+function LikeQuote(){
+    let data = $("#likeForm").serialize()
+    $.ajax({
+        type: "POST",
+        url: '/Home/Like',
+        data: data,
+        dataType: "json",
+        success: function (response) {
+            if(response["success"]){
+                $("#likeBtn").hide()
+                $("#delLikeBtn").show()
+                let likeElem = $("#likeCount")
+                let likes = parseInt(likeElem.html())
+                likeElem.html(likes+1)
+            }
+            else{
+                alert(response["error"])
+            }
+        },
+        error: function (xhr) {
+            if(xhr.status === 401){
+                location.href = "/Account/Login"
+            }
+        }
+    })
+}
+function delLikeQuote(){
+    let data = $("#likeForm").serialize()
+    $.ajax({
+        type: "POST",
+        url: '/Home/DeleteLike',
+        data: data,
+        dataType: "json",
+        success: function (response) {
+            if(response["success"]){
+                $("#delLikeBtn").hide()
+                $("#likeBtn").show()
+                let likeElem = $("#likeCount")
+                let likes = parseInt(likeElem.html())
+                likeElem.html(likes-1)
+            }
+            else{
+                alert(response["error"])
+            }
+        },
+        error: function (xhr) {
+            if(xhr.status === 401){
+                location.href = "/Account/Login"
+            }
+        }
+    })
+}

@@ -12,5 +12,18 @@ public class RandomDbContext : IdentityDbContext<User>
     public RandomDbContext(DbContextOptions<RandomDbContext> opts) : base(opts)
     {
     }
-    public virtual DbSet<QuoteModel>? Quotes { get; set; }
+    public DbSet<QuoteModel>? Quotes{ get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<User>()
+            .HasMany(user => user.LikedQuotes)
+            .WithMany(quote => quote.UserLikes);
+
+        builder.Entity<User>()
+            .HasMany(user => user.MyQuotes)
+            .WithOne(quote => quote.User);
+        
+        base.OnModelCreating(builder);
+    }
 }

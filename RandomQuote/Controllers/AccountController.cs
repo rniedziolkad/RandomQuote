@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using RandomQuote.Models;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -11,14 +12,17 @@ public class AccountController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly RandomDbContext _randomDbContext;
     
-    public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+    public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RandomDbContext randomDbContext)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _randomDbContext = randomDbContext;
     }
 
     // GET: /Account
+    [HttpGet]
     [Authorize(Roles = "User")]
     public IActionResult Index()
     {
@@ -27,7 +31,7 @@ public class AccountController : Controller
             return View();
         }
         var user = _userManager.GetUserAsync(User).Result;
-
+        _randomDbContext.Quotes?.Where(q=>q.User == user).Load();
         return View(user);
     }
 
@@ -46,6 +50,7 @@ public class AccountController : Controller
     }
 
     //GET: /Account/Visit/username
+    [HttpGet]
     [Route("/Account/Visit/{username}")]
     public IActionResult Visit(string username)
     {
@@ -66,18 +71,12 @@ public class AccountController : Controller
         {
             return View();
         }
-
-        Console.WriteLine("Logging In");
-        Console.WriteLine(model.Username);
-        Console.WriteLine(model.Password);
-
+        
         var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
         if (result == SignInResult.Success)
         {
-            Console.WriteLine("Success Login");
             if (!string.IsNullOrEmpty(returnUrl))
             {
-                Console.WriteLine("Redirecting back");
                 return Redirect(returnUrl);
             }
 
@@ -254,6 +253,4 @@ public class AccountController : Controller
         return View();
 
     }
-    
-
 }

@@ -13,67 +13,78 @@
     }
 }
 
-<div class="text-center">
-    <h1 class="display-4">@Model.UserName</h1>
-    @{
-        if (TempData["EditSuccess"] != null)
-        {
-            <h4 id="notificationMessage">
-                <script>
+<div class="container mt-5">
+<div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+        <h1 class="display-4">@Model.UserName</h1>
+        @{
+            if (TempData["EditSuccess"] != null)
+            {
+                <h4 id="notificationMessage">
+                    <script>
                      window.onload = function(){
                          showNotification('@TempData["EditSuccess"]');
                      }
                  </script>
-            </h4>
+                </h4>
+            }
         }
-    }
-    <div id="emailContent">
-        <h4>Email</h4>
-        <form id="formEmail" method="post" asp-controller="Account" asp-action="EditEmail" onreset="exitEmail()">
-            <label class="col-form-label" asp-for="Email"></label>
-            <input type="email" asp-for="Email" disabled/>
-            <span asp-validation-for="Email" class="text-danger"></span>
-            <br/>
-            <button id="cancelEditEmail" type="reset" class="btn btn-danger m-2" hidden disabled>Cancel</button>
-            <button id="submitEditEmail" type="button" class="btn btn-primary m-2" onclick="submitEmail()" hidden disabled>Save</button>
-            <button id="btnEditEmail" type="button" class="btn btn-warning m-2 editBtn" onclick="editEmail()">Edit</button>
-        </form>
+        <div id="mySettings">
+            <div id="emailContent" class="card px-5 py-5">
+                <div class="form-data">
+                    <form id="formEmail" method="post" asp-controller="Account" asp-action="EditEmail" onreset="exitEmail()">
+                    <div class="forms-inputs mb-4">
+                        <label asp-for="Email"></label>
+                        <input type="email" asp-for="Email" disabled/>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3" style="display: flex">
+                        <button id="cancelEditEmail" type="reset" class="btn btn-danger w-50" hidden disabled style="margin-right: 5px">Cancel</button>
+                        <button id="submitEditEmail" type="button" class="btn btn-primary w-50" onclick="submitEmail()" hidden disabled >Save</button>
+                        <button id="btnEditEmail" type="button" class="btn btn-warning w-100 editBtn" onclick="editEmail()">Edit</button>
+                    </div>
+                    <div class="mb-3">
+                        <button id="btnEditPassword" type="button" class="btn btn-warning w-100 editBtn" onclick="editPassword()">Edit Password</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <div id="AboutMeContent" class="card px-5 py-5">
+                <div class="form-data">
+                    <form id="formUserInfo" asp-controller="Account" asp-action="EditUserInfo" onreset="exitUserInfo()">
+                        <div class="forms-inputs mb-4">
+                            <label asp-for="FirstName"></label>
+                            <input type="text" asp-for="FirstName" class="iUserInfo" disabled/>
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="forms-inputs mb-4">
+                            <label asp-for="LastName"></label>
+                            <input type="text" asp-for="LastName" class="iUserInfo" disabled/>
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="forms-inputs mb-4">
+                            <label asp-for="Sex"></label>
+                            <select asp-for="Sex" class="iUserInfo" disabled>
+                                <option value="">Don't specify</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            <span asp-validation-for="Sex" class="text-danger"></span>
+                        </div>
+                        <div class="forms-inputs mb-4">
+                            <label asp-for="Description"></label>
+                            <textarea asp-for="Description" class="iUserInfo" rows="10" cols="40" disabled></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3" style="display: flex">
+                            <button id="cancelEditUserInfo" type="reset" class="btn btn-danger w-50" hidden disabled style="margin-right: 5px">Cancel</button>
+                            <button id="submitEditUserInfo" type="button" class="btn btn-primary w-50" onclick="submitUserInfo()" hidden disabled>Save</button>
+                            <button id="btnEditUserInfo" type="button" class="btn btn-warning w-100 editBtn" onclick="editUserInfo()">Edit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="passwordContent">
-        <h4>Password</h4>
-        <button id="btnEditPassword" type="button" class="btn btn-warning m-2 editBtn" onclick="editPassword()">Edit</button>
-    </div>
-    <div id="AboutMeContent">
-        <h4>About me</h4>
-        <form id="formUserInfo" asp-controller="Account" asp-action="EditUserInfo" onreset="exitUserInfo()">
-            <label class="col-form-label" asp-for="FirstName"></label>
-            <input type="text" asp-for="FirstName" class="iUserInfo" disabled/>
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-            <br/>
-            <label class="col-form-label" asp-for="LastName"></label>
-            <input type="text" asp-for="LastName" class="iUserInfo" disabled/>
-            <span asp-validation-for="LastName" class="text-danger"></span>
-            <br/>
-            <label class="col-form-label" asp-for="Sex"></label>
-            <select asp-for="Sex" class="iUserInfo" disabled>
-                <option value="">Don't specify</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
-            <span asp-validation-for="Sex" class="text-danger"></span>
-            <br/>
-            <label class="col-form-label" asp-for="Description"></label>
-            <br/>
-            <textarea asp-for="Description" class="iUserInfo" rows="10" cols="40" disabled></textarea>
-            <br/>
-            <span asp-validation-for="Description" class="text-danger"></span>
-            <br/>
-            <button id="cancelEditUserInfo" type="reset" class="btn btn-danger m-2" hidden disabled>Cancel</button>
-            <button id="submitEditUserInfo" type="button" class="btn btn-primary m-2" onclick="submitUserInfo()" hidden disabled>Save</button>
-            <button id="btnEditUserInfo" type="button" class="btn btn-warning m-2 editBtn" onclick="editUserInfo()">Edit</button>
-        </form>
-    </div>
-    
-    
-    
+</div>
 </div>

@@ -1,8 +1,45 @@
-﻿@{
+﻿@model QuoteModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+<div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+        <button class="btn btn-dark btn-md w-100" onclick="location.href='/'" style="margin-bottom: 20px">Get Random Quote</button>
+        <div class="mb-3 card">
+            <div class="card-header">
+                <h4>@Model.Author</h4>
+            </div>
+            <div class="card-body">
+                <p>
+                    <i>
+                        @Model.Quote
+                    </i></p>
+            </div>
+            <div class="card-footer">
+                <span class="float-start" style="line-height:30px; vertical-align: middle">Added by: <a href="/Account/Visit/@Model.User?.UserName">@Model.User?.UserName</a></span>
+                <span class="float-end">
+                    <form id="likeForm">
+                        @Html.HiddenFor(model => model.QuoteId)
+                        @Html.AntiForgeryToken()
+                        @{
+                            if (ViewBag.Liked)
+                            {
+                                <button id="likeBtn" type="button" class="btn btn-outline-secondary btn-sm" onclick="LikeQuote()" style="display: none; height: 30px; width: 120px">Like</button>
+                                <button id="delLikeBtn" type="button" class="btn btn-dark btn-sm" onclick="delLikeQuote()" style="height: 30px; width: 120px">Liked</button>
+                            }
+                            else
+                            {
+                                <button id="likeBtn" type="button" class="btn btn-outline-secondary btn-sm" onclick="LikeQuote()" style="height: 30px; width: 100px">Like</button>
+                                <button id="delLikeBtn" type="button" class="btn btn-dark btn-sm" onclick="delLikeQuote()" style="display: none; height: 30px; width: 100px">Liked</button>
+                            }
+                        }
+                    </form>
+                </span>
+                <span class="float-end" style="line-height:30px; vertical-align: middle; margin-right: 5px"><b><span id="likeCount">@Model.UserLikes.Count</span> Likes</b></span>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
