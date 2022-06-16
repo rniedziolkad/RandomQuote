@@ -3,19 +3,28 @@
 @{
     ViewBag.Title = "Add Quote";
 }
-<div class="text-center">
-<h1 class="display-4">@ViewBag.Title</h1>
-    <form method="post" asp-controller="ManageQuotes" asp-action="Add">
-        <label class="col-form-label" asp-for="Author"></label>
-        <input type="text" asp-for="Author"/>
-        <span asp-validation-for="Author" class="text-danger"></span>
-        <br/>
-        <label class="col-form-label" asp-for="Quote"></label><br/>
-        <textarea asp-for="Quote" rows="4" cols="40"></textarea><br/>
-        <span asp-validation-for="Quote" class="text-danger"></span>
-        <br/>
-        <input type="submit" class="btn btn-primary m-2" value="Add quote"/>
-        <br/>
-        <button type="button" class="btn btn-secondary m-2" onclick="location.href='/ManageQuotes'">Cancel</button>
-</form>
+<div class="container mt-5">
+<div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+        <h1 class="display-4">Add Quote</h1>
+        <div class="card px-5 py-5">
+            <div class="form-data">
+                <form method="post" asp-controller="ManageQuotes" asp-action="Add">
+                    <div class="forms-inputs mb-4">
+                        <label asp-for="Author"></label>
+                        <input type="text" asp-for="Author"/>
+                        <span asp-validation-for="Author" class="text-danger"></span>
+                    </div>
+                    <div class="forms-inputs mb-4">
+                        <label asp-for="Quote"></label><br/>
+                        <textarea asp-for="Quote" rows="4" cols="40"></textarea><br/>
+                        <span asp-validation-for="Quote" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3"><input type="submit" class="btn btn-primary w-100" value="Add quote"/></div>
+                    <div class="mb-3"><button type="button" class="btn btn-secondary w-100" onclick="location.href='/ManageQuotes'">Cancel</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 </div>

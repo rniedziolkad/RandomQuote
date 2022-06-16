@@ -3,25 +3,40 @@
 @{
     ViewBag.Title = "Edit Quote";
 }
-<div class="text-center">
-    <h1 class="display-4">@ViewBag.Title</h1>
-    <form method="post" asp-controller="ManageQuotes" asp-action="Edit">
-        <label class="col-form-label" asp-for="Author"></label>
-        <input type="text" asp-for="Author"/>
-        <span asp-validation-for="Author" class="text-danger"></span>
-        <br/>
-        <label class="col-form-label" asp-for="Quote"></label><br/>
-        <textarea asp-for="Quote" rows="4" cols="40"></textarea><br/>
-        <span asp-validation-for="Quote" class="text-danger"></span>
-        <br/>
-        <p>This quote has @Model.UserLikes.Count likes</p>
-        <div id="hiddenData">
-            @Html.HiddenFor(model => model.QuoteId)
-            @Html.AntiForgeryToken()
+<div class="container mt-5">
+<div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+        <h1 class="display-4">Edit Quote</h1>
+        <div class="card px-5 py-5">
+            <div class="form-data">
+                <form method="post" asp-controller="ManageQuotes" asp-action="Edit">
+                    <div class="forms-inputs mb-4">
+                        <label asp-for="Author"></label>
+                        <input type="text" asp-for="Author"/>
+                        <span asp-validation-for="Author" class="text-danger"></span>
+                    </div>
+                    <div class="forms-inputs mb-4">
+                        <label asp-for="Quote"></label>
+                        <textarea asp-for="Quote" rows="4" cols="40"></textarea>
+                        <span asp-validation-for="Quote" class="text-danger"></span>
+                    </div>
+                    <div class="forms-inputs mb-4">
+                        <p>This quote has @Model.UserLikes.Count likes</p>
+                        <div id="hiddenData">
+                            @Html.HiddenFor(model => model.QuoteId)
+                            @Html.AntiForgeryToken()
+                        </div>
+                    </div>
+                    <div class="mb-3" style="display: flex">
+                        <button type="button" class="btn btn-danger w-50" onclick="deleteQuote()" style="margin-right: 5px">Delete quote</button>
+                        <input type="submit" class="btn btn-primary w-50" value="Save changes"/>
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-secondary w-100" onclick="location.href='/ManageQuotes'">Cancel</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <input type="submit" class="btn btn-primary m-2" value="Save changes"/>
-        <button type="button" class="btn btn-danger m-2" onclick="deleteQuote()">Delete quote</button>
-        <br/>
-        <button type="button" class="btn btn-secondary m-2" onclick="location.href='/ManageQuotes'">Cancel</button>
-</form>
+    </div>
+</div>
 </div>

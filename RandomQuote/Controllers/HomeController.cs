@@ -59,7 +59,7 @@ public class HomeController : Controller
             await _context.SaveChangesAsync();
             return Json(new {success = true});
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return Json(new {success = false, error = "Already liked!"});
         }

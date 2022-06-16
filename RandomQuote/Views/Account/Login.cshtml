@@ -1,30 +1,42 @@
-﻿@using Microsoft.EntityFrameworkCore
-@model LoginViewModel
+﻿@model LoginViewModel
 @{
     ViewData["Title"] = "Login";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Login Here</h1>
-    @{
-        if (TempData["Message"]!=null)
-        {
-            <h3 class="text-info">@TempData["Message"]</h3>
-        }
-    }
-    
-    <form method="post" asp-action="Login">
-        <label class="col-form-label" asp-for="Username"></label>
-        <input type="text" asp-for="Username"/>
-        <span asp-validation-for="Username" class="text-danger"></span>
-        <label class="col-form-label" asp-for="Password"></label>
-        <input type="password" asp-for="Password"/>
-        <span asp-validation-for="Password" class="text-danger"></span>
-        <label class="col-form-label" asp-for="RememberMe"></label>
-        <input type="checkbox" asp-for="RememberMe"/>
-        <span asp-validation-for="RememberMe" class="text-danger"></span>
-        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl"/>
-        <span class="text-danger">@Html.ValidationMessage("Failed")</span>
-        <input type="submit" name="Login" value="Log In"/>
-    </form>
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6">
+            @{
+                if (TempData["Message"] != null)
+                {
+                    <h3 class="text-info">@TempData["Message"]</h3>
+                }
+            }
+            <div class="card px-5 py-5" id="form1">
+                <div class="form-data">
+                    <form method="post" asp-action="Login">
+                        <div class="forms-inputs mb-4">
+                            <label asp-for="Username"></label>
+                            <input type="text" asp-for="Username"/><br/>
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+                        <div class="forms-inputs mb-4">
+                            <label asp-for="Password"></label>
+                            <input type="password" asp-for="Password"/>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="forms-inputs mb-4">
+                            <label class="col-form-label" asp-for="RememberMe"></label>
+                            <input type="checkbox" asp-for="RememberMe" style="width: 20px;height: 20px; margin-top: 20px; margin-left: 20px"/>
+                            <span asp-validation-for="RememberMe" class="text-danger"></span>
+                        </div>
+                        <div class="forms-inputs mb-4">
+                            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl"/>
+                            <span class="text-danger">@Html.ValidationMessage("Failed")</span>
+                        </div>
+                        <div class="mb-3"><input type="submit" name="Login" value="Log In" class="btn btn-dark w-100" style="height: 50px"/></div>
+                    </form>
+                </div>    
+            </div>    
+        </div>
+    </div>
 </div>
